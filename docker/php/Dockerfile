@@ -20,4 +20,13 @@ RUN apt-get update \
 
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
+ARG UID=1000
+ARG GID=1000
+ARG USERNAME=laravel
+
+RUN groupadd -g ${GID} ${USERNAME} \
+  && useradd -m -u ${UID} -g ${GID} -s /bin/bash ${USERNAME}
+
 WORKDIR /var/www
+
+USER ${USERNAME}
