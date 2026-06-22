@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
@@ -40,5 +41,26 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'admin_status' => 'boolean',
     ];
+
+    public function attendanceRecords(): HasMany
+    {
+        return $this->hasMany(AttendanceRecord::class);
+    }
+
+    public function correctionRequests(): HasMany
+    {
+        return $this->hasMany(AttendanceCorrectionRequest::class, 'applicant_user_id');
+    }
+
+    public function approvedCorrectionRequests(): HasMany
+    {
+        return $this->hasMany(AttendanceCorrectionRequest::class, 'approved_by');
+    }
+
+    public function isAdmin(): bool
+    {
+        return (bool) $this->admin_status;
+    }
 }
