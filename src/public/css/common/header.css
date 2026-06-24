@@ -1,0 +1,21 @@
+.app-header {
+  background: #000;
+}
+
+.app-header__inner {
+  max-width: 1230px;
+  margin: 0 auto;
+  padding: 18px 40px;
+}
+
+.app-header__logo {
+  display: inline-block;
+  line-height: 1;
+}
+
+.app-header__logo-image {
+  display: block;
+  width: 370px;
+  max-width: 100%;
+  height: auto;
+}
