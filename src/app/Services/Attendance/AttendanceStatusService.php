@@ -51,6 +51,15 @@ class AttendanceStatusService
         return $this->hasOpenBreak($attendanceRecord);
     }
 
+    public function canClockOut(?AttendanceRecord $attendanceRecord): bool
+    {
+        if (!$attendanceRecord || $attendanceRecord->clock_out) {
+            return false;
+        }
+
+        return !$this->hasOpenBreak($attendanceRecord);
+    }
+
     private function hasOpenBreak(AttendanceRecord $attendanceRecord): bool
     {
         return $attendanceRecord->breaks()

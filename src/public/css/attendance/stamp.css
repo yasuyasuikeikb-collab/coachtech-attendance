@@ -57,3 +57,9 @@
   background: #fff;
   color: #000;
 }
+
+.stamp__message {
+  margin: 64px 0 0;
+  font-size: 26px;
+  font-weight: 700;
+}

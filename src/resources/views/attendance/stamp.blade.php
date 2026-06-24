@@ -38,7 +38,18 @@
                     <button class="stamp__button stamp__button--secondary" type="submit">休憩戻</button>
                 </form>
             @endif
+
+            @if ($canClockOut)
+                <form class="stamp__form" action="/attendance/clock-out" method="post">
+                    @csrf
+                    <button class="stamp__button" type="submit">退勤</button>
+                </form>
+            @endif
         </div>
+
+        @if ($attendanceStatus === '退勤済')
+            <p class="stamp__message">お疲れ様でした。</p>
+        @endif
     </div>
 </section>
 @endsection

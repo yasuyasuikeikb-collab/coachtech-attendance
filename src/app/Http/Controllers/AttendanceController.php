@@ -6,6 +6,7 @@ use App\Models\AttendanceRecord;
 use App\Services\Attendance\AttendanceBreakEndService;
 use App\Services\Attendance\AttendanceBreakStartService;
 use App\Services\Attendance\AttendanceClockInService;
+use App\Services\Attendance\AttendanceClockOutService;
 use App\Services\Attendance\AttendanceStatusService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,12 +26,14 @@ class AttendanceController extends Controller
         $canClockIn = $attendanceStatusService->canClockIn($attendanceRecord);
         $canStartBreak = $attendanceStatusService->canStartBreak($attendanceRecord);
         $canEndBreak = $attendanceStatusService->canEndBreak($attendanceRecord);
+        $canClockOut = $attendanceStatusService->canClockOut($attendanceRecord);
 
         return view('attendance.stamp', [
             'attendanceStatus' => $attendanceStatus,
             'canClockIn' => $canClockIn,
             'canStartBreak' => $canStartBreak,
             'canEndBreak' => $canEndBreak,
+            'canClockOut' => $canClockOut,
         ]);
     }
 
@@ -57,6 +60,15 @@ class AttendanceController extends Controller
         AttendanceBreakEndService $attendanceBreakEndService
     ): RedirectResponse {
         $attendanceBreakEndService->endBreak($request->user());
+
+        return redirect('/attendance');
+    }
+
+    public function clockOut(
+        Request $request,
+        AttendanceClockOutService $attendanceClockOutService
+    ): RedirectResponse {
+        $attendanceClockOutService->clockOut($request->user());
 
         return redirect('/attendance');
     }
