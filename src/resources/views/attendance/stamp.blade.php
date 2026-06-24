@@ -7,7 +7,7 @@
 @section('content')
 <section class="stamp">
     <div class="stamp__inner">
-        <p class="stamp__status">勤務外</p>
+        <p class="stamp__status">{{ $attendanceStatus }}</p>
 
         <p class="stamp__date">
             {{ now()->format('Y年m月d日') }}
