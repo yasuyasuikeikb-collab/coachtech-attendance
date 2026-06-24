@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceRecord;
+use App\Services\Attendance\AttendanceBreakEndService;
 use App\Services\Attendance\AttendanceBreakStartService;
 use App\Services\Attendance\AttendanceClockInService;
 use App\Services\Attendance\AttendanceStatusService;
@@ -23,11 +24,13 @@ class AttendanceController extends Controller
         $attendanceStatus = $attendanceStatusService->getStatus($attendanceRecord);
         $canClockIn = $attendanceStatusService->canClockIn($attendanceRecord);
         $canStartBreak = $attendanceStatusService->canStartBreak($attendanceRecord);
+        $canEndBreak = $attendanceStatusService->canEndBreak($attendanceRecord);
 
         return view('attendance.stamp', [
             'attendanceStatus' => $attendanceStatus,
             'canClockIn' => $canClockIn,
             'canStartBreak' => $canStartBreak,
+            'canEndBreak' => $canEndBreak,
         ]);
     }
 
@@ -45,6 +48,15 @@ class AttendanceController extends Controller
         AttendanceBreakStartService $attendanceBreakStartService
     ): RedirectResponse {
         $attendanceBreakStartService->startBreak($request->user());
+
+        return redirect('/attendance');
+    }
+
+    public function endBreak(
+        Request $request,
+        AttendanceBreakEndService $attendanceBreakEndService
+    ): RedirectResponse {
+        $attendanceBreakEndService->endBreak($request->user());
 
         return redirect('/attendance');
     }

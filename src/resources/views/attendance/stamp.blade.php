@@ -31,6 +31,13 @@
                     <button class="stamp__button stamp__button--secondary" type="submit">休憩入</button>
                 </form>
             @endif
+
+            @if ($canEndBreak)
+                <form class="stamp__form" action="/attendance/break-end" method="post">
+                    @csrf
+                    <button class="stamp__button stamp__button--secondary" type="submit">休憩戻</button>
+                </form>
+            @endif
         </div>
     </div>
 </section>
