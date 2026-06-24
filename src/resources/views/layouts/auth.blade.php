@@ -13,7 +13,7 @@
     <header class="app-header">
         <div class="app-header__inner">
             <a class="app-header__logo" href="/">
-                <img class="app-header__logo-image" src="{{ asset('images/common/coachtech-logo.png.png') }}" alt="COACHTECH">
+                <img class="app-header__logo-image" src="{{ asset('images/common/coachtech-logo.png') }}" alt="COACHTECH">
             </a>
         </div>
     </header>

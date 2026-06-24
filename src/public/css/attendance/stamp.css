@@ -1,0 +1,48 @@
+.stamp {
+  display: flex;
+  justify-content: center;
+}
+
+.stamp__inner {
+  width: 100%;
+  max-width: 680px;
+  text-align: center;
+}
+
+.stamp__status {
+  display: inline-block;
+  margin: 0 0 32px;
+  padding: 8px 20px;
+  border-radius: 50px;
+  background: #c8c8c8;
+  color: #696969;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.stamp__date {
+  margin: 0 0 24px;
+  font-size: 32px;
+}
+
+.stamp__time {
+  margin: 0 0 64px;
+  font-size: 80px;
+  font-weight: 700;
+}
+
+.stamp__actions {
+  display: flex;
+  justify-content: center;
+}
+
+.stamp__button {
+  min-width: 220px;
+  padding: 16px 32px;
+  border: none;
+  border-radius: 20px;
+  background: #000;
+  color: #fff;
+  font-size: 32px;
+  font-weight: 700;
+}

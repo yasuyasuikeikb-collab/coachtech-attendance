@@ -3,6 +3,9 @@
 }
 
 .app-header__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   max-width: 1230px;
   margin: 0 auto;
   padding: 18px 40px;
@@ -18,4 +21,30 @@
   width: 370px;
   max-width: 100%;
   height: auto;
+}
+
+.app-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.app-header__nav-link {
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.app-header__logout-form {
+  margin: 0;
+}
+
+.app-header__logout-button {
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
 }
