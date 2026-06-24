@@ -28,6 +28,11 @@ class AttendanceStatusService
         return self::STATUS_WORKING;
     }
 
+    public function canClockIn(?AttendanceRecord $attendanceRecord): bool
+    {
+        return !$attendanceRecord;
+    }
+
     private function hasOpenBreak(AttendanceRecord $attendanceRecord): bool
     {
         return $attendanceRecord->breaks()

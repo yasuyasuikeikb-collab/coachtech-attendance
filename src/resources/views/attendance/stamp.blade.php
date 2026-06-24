@@ -18,7 +18,12 @@
         </p>
 
         <div class="stamp__actions">
-            <button class="stamp__button" type="button">出勤</button>
+            @if ($canClockIn)
+                <form class="stamp__form" action="/attendance/clock-in" method="post">
+                    @csrf
+                    <button class="stamp__button" type="submit">出勤</button>
+                </form>
+            @endif
         </div>
     </div>
 </section>
