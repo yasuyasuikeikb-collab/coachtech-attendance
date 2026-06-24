@@ -34,7 +34,9 @@
 .stamp__actions {
   display: flex;
   justify-content: center;
+  gap: 24px;
 }
+
 
 .stamp__form {
   margin: 0;
@@ -49,4 +51,9 @@
   color: #fff;
   font-size: 32px;
   font-weight: 700;
+}
+
+.stamp__button--secondary {
+  background: #fff;
+  color: #000;
 }
