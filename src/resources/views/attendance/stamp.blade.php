@@ -25,6 +25,13 @@
                 </form>
             @endif
 
+            @if ($canClockOut)
+                <form class="stamp__form" action="/attendance/clock-out" method="post">
+                    @csrf
+                    <button class="stamp__button" type="submit">退勤</button>
+                </form>
+            @endif
+
             @if ($canStartBreak)
                 <form class="stamp__form" action="/attendance/break-start" method="post">
                     @csrf
@@ -36,13 +43,6 @@
                 <form class="stamp__form" action="/attendance/break-end" method="post">
                     @csrf
                     <button class="stamp__button stamp__button--secondary" type="submit">休憩戻</button>
-                </form>
-            @endif
-
-            @if ($canClockOut)
-                <form class="stamp__form" action="/attendance/clock-out" method="post">
-                    @csrf
-                    <button class="stamp__button" type="submit">退勤</button>
                 </form>
             @endif
         </div>
