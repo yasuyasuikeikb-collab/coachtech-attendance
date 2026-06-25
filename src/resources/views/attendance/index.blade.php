@@ -59,7 +59,12 @@
                             {{ $attendanceRow['totalTime'] }}
                         </td>
                         <td class="attendance-table__data">
-                            <a class="attendance-table__detail-link" href="#">詳細</a>
+                            <a
+                                class="attendance-table__detail-link"
+                                href="/attendance/{{ $attendanceRow['id'] }}"
+                            >
+                                詳細
+                            </a>
                         </td>
                     </tr>
                 @empty

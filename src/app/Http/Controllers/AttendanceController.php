@@ -74,6 +74,19 @@ class AttendanceController extends Controller
         ]);
     }
 
+    public function show(Request $request, AttendanceRecord $attendanceRecord): View
+    {
+        if ($attendanceRecord->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        $attendanceRecord->load(['user', 'breaks']);
+
+        return view('attendance.show', [
+            'attendanceRecord' => $attendanceRecord,
+        ]);
+    }
+
     public function clockIn(
         Request $request,
         AttendanceClockInService $attendanceClockInService
