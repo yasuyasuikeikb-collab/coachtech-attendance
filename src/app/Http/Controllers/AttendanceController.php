@@ -8,6 +8,7 @@ use App\Services\Attendance\AttendanceBreakStartService;
 use App\Services\Attendance\AttendanceClockInService;
 use App\Services\Attendance\AttendanceClockOutService;
 use App\Services\Attendance\AttendanceStatusService;
+use App\Services\Attendance\AttendanceTimeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -38,8 +39,10 @@ class AttendanceController extends Controller
         ]);
     }
 
-    public function index(Request $request): View
-    {
+    public function index(
+        Request $request,
+        AttendanceTimeService $attendanceTimeService
+    ): View {
         $currentMonth = Carbon::parse($request->query('month', today()->format('Y-m')));
 
         $attendanceRecords = AttendanceRecord::where('user_id', $request->user()->id)
@@ -49,9 +52,25 @@ class AttendanceController extends Controller
             ->orderBy('date')
             ->get();
 
+        $attendanceRows = $attendanceRecords->map(function (
+            AttendanceRecord $attendanceRecord
+        ) use ($attendanceTimeService): array {
+            $totalBreakMinutes = $attendanceTimeService->getTotalBreakMinutes($attendanceRecord);
+            $totalWorkMinutes = $attendanceTimeService->getTotalWorkMinutes($attendanceRecord);
+
+            return [
+                'id' => $attendanceRecord->id,
+                'date' => $attendanceRecord->date->format('m/d'),
+                'clockIn' => $attendanceRecord->clock_in ? substr($attendanceRecord->clock_in, 0, 5) : '',
+                'clockOut' => $attendanceRecord->clock_out ? substr($attendanceRecord->clock_out, 0, 5) : '',
+                'breakTime' => $attendanceTimeService->formatMinutes($totalBreakMinutes),
+                'totalTime' => $attendanceTimeService->formatMinutes($totalWorkMinutes),
+            ];
+        });
+
         return view('attendance.index', [
             'currentMonth' => $currentMonth,
-            'attendanceRecords' => $attendanceRecords,
+            'attendanceRows' => $attendanceRows,
         ]);
     }
 

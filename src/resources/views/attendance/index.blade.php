@@ -41,22 +41,22 @@
                 </tr>
             </thead>
             <tbody class="attendance-table__body">
-                @forelse ($attendanceRecords as $attendanceRecord)
+                @forelse ($attendanceRows as $attendanceRow)
                     <tr class="attendance-table__row">
                         <td class="attendance-table__data">
-                            {{ $attendanceRecord->date->format('m/d') }}
+                            {{ $attendanceRow['date'] }}
                         </td>
                         <td class="attendance-table__data">
-                            {{ $attendanceRecord->clock_in ? substr($attendanceRecord->clock_in, 0, 5) : '' }}
+                            {{ $attendanceRow['clockIn'] }}
                         </td>
                         <td class="attendance-table__data">
-                            {{ $attendanceRecord->clock_out ? substr($attendanceRecord->clock_out, 0, 5) : '' }}
+                            {{ $attendanceRow['clockOut'] }}
                         </td>
                         <td class="attendance-table__data">
-                            -
+                            {{ $attendanceRow['breakTime'] }}
                         </td>
                         <td class="attendance-table__data">
-                            -
+                            {{ $attendanceRow['totalTime'] }}
                         </td>
                         <td class="attendance-table__data">
                             <a class="attendance-table__detail-link" href="#">詳細</a>
