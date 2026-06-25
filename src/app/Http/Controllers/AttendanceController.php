@@ -10,6 +10,7 @@ use App\Services\Attendance\AttendanceClockOutService;
 use App\Services\Attendance\AttendanceStatusService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
 class AttendanceController extends Controller
@@ -34,6 +35,23 @@ class AttendanceController extends Controller
             'canStartBreak' => $canStartBreak,
             'canEndBreak' => $canEndBreak,
             'canClockOut' => $canClockOut,
+        ]);
+    }
+
+    public function index(Request $request): View
+    {
+        $currentMonth = Carbon::parse($request->query('month', today()->format('Y-m')));
+
+        $attendanceRecords = AttendanceRecord::where('user_id', $request->user()->id)
+            ->whereYear('date', $currentMonth->year)
+            ->whereMonth('date', $currentMonth->month)
+            ->with('breaks')
+            ->orderBy('date')
+            ->get();
+
+        return view('attendance.index', [
+            'currentMonth' => $currentMonth,
+            'attendanceRecords' => $attendanceRecords,
         ]);
     }
 

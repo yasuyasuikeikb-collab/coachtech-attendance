@@ -13,4 +13,5 @@ Route::middleware('auth')->group(function () {
     Route::post('/attendance/break-start', [AttendanceController::class, 'startBreak']);
     Route::post('/attendance/break-end', [AttendanceController::class, 'endBreak']);
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut']);
+    Route::get('/attendance/list', [AttendanceController::class, 'index']);
 });
