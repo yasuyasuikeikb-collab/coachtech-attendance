@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Attendance\StoreCorrectionRequest;
 use App\Models\AttendanceRecord;
 use App\Services\Attendance\AttendanceBreakEndService;
 use App\Services\Attendance\AttendanceBreakStartService;
 use App\Services\Attendance\AttendanceClockInService;
 use App\Services\Attendance\AttendanceClockOutService;
+use App\Services\Attendance\AttendanceCorrectionRequestService;
 use App\Services\Attendance\AttendanceStatusService;
 use App\Services\Attendance\AttendanceTimeService;
 use Illuminate\Http\RedirectResponse;
@@ -85,6 +87,33 @@ class AttendanceController extends Controller
         return view('attendance.show', [
             'attendanceRecord' => $attendanceRecord,
         ]);
+    }
+
+    public function requestCorrection(
+        StoreCorrectionRequest $request,
+        AttendanceRecord $attendanceRecord,
+        AttendanceCorrectionRequestService $attendanceCorrectionRequestService
+    ): RedirectResponse {
+        if ($attendanceRecord->user_id !== $request->user()->id) {
+            abort(403);
+        }
+
+        $correctionRequest = $attendanceCorrectionRequestService->create(
+            $attendanceRecord,
+            $request->user(),
+            $request->validated()
+        );
+
+        if (!$correctionRequest) {
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', '承認待ちの修正申請が既にあります。');
+        }
+
+        return redirect()
+            ->back()
+            ->with('success', '修正申請を送信しました。');
     }
 
     public function clockIn(

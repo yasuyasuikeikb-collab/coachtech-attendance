@@ -16,6 +16,45 @@
   font-weight: 700;
 }
 
+.attendance-detail__message {
+  margin: 0 0 24px;
+  padding: 16px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.attendance-detail__message--success {
+  background: #e6ffed;
+  color: #0f7b2f;
+}
+
+.attendance-detail__message--error {
+  background: #ffecec;
+  color: #d93025;
+}
+
+.attendance-detail__errors {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #d93025;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.attendance-detail__error {
+  margin: 0;
+  color: #d93025;
+  font-weight: 700;
+}
+
+.attendance-detail__error+.attendance-detail__error {
+  margin-top: 8px;
+}
+
+.attendance-detail__form {
+  margin: 0;
+}
+
 .attendance-detail__card {
   border-radius: 10px;
   overflow: hidden;
@@ -31,6 +70,10 @@
 
 .attendance-detail__row:last-child {
   border-bottom: none;
+}
+
+.attendance-detail__row--textarea {
+  min-height: 120px;
 }
 
 .attendance-detail__label {
@@ -57,12 +100,33 @@
   color: #000;
 }
 
-.attendance-detail__actions {
-  margin-top: 32px;
-  text-align: right;
+.attendance-detail__input {
+  width: 120px;
+  padding: 8px 12px;
+  border: 1px solid #737373;
+  border-radius: 4px;
+  font-weight: 700;
 }
 
-.attendance-detail__back-link {
+.attendance-detail__textarea {
+  width: 100%;
+  min-height: 72px;
+  padding: 12px;
+  border: 1px solid #737373;
+  border-radius: 4px;
+  font-weight: 700;
+  resize: vertical;
+}
+
+.attendance-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 32px;
+}
+
+.attendance-detail__back-link,
+.attendance-detail__submit-button {
   display: inline-block;
   padding: 10px 24px;
   border-radius: 5px;
@@ -70,4 +134,8 @@
   color: #fff;
   font-weight: 700;
   text-decoration: none;
+}
+
+.attendance-detail__submit-button {
+  border: none;
 }
