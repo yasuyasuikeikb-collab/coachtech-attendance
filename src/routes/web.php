@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\CorrectionRequestController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,4 +22,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/attendance/{attendanceRecord}/correction', [AttendanceController::class, 'requestCorrection'])
         ->whereNumber('attendanceRecord');
+
+    Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
 });
