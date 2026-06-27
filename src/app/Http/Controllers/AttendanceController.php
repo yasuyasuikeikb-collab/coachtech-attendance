@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Attendance\StoreCorrectionRequest;
+use App\Models\AttendanceCorrectionRequest;
 use App\Models\AttendanceRecord;
 use App\Services\Attendance\AttendanceBreakEndService;
 use App\Services\Attendance\AttendanceBreakStartService;
@@ -84,8 +85,16 @@ class AttendanceController extends Controller
 
         $attendanceRecord->load(['user', 'breaks']);
 
+        $pendingCorrectionRequest = $attendanceRecord->correctionRequests()
+            ->with('correctionBreaks')
+            ->where('applicant_user_id', $request->user()->id)
+            ->where('status', AttendanceCorrectionRequest::STATUS_PENDING)
+            ->latest()
+            ->first();
+
         return view('attendance.show', [
             'attendanceRecord' => $attendanceRecord,
+            'pendingCorrectionRequest' => $pendingCorrectionRequest,
         ]);
     }
 

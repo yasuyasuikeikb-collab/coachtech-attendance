@@ -9,7 +9,7 @@
 }
 
 .attendance-detail__title {
-  margin: 0 0 32px;
+  margin: 0 0 48px;
   padding-left: 16px;
   border-left: 8px solid #000;
   font-size: 30px;
@@ -65,7 +65,7 @@
   display: grid;
   grid-template-columns: 220px 1fr;
   min-height: 72px;
-  border-bottom: 2px solid #f5f5f5;
+  border-bottom: 2px solid #f0f0f0;
 }
 
 .attendance-detail__row:last-child {
@@ -79,7 +79,7 @@
 .attendance-detail__label {
   display: flex;
   align-items: center;
-  padding: 0 32px;
+  padding: 0 40px;
   color: #737373;
   font-weight: 700;
 }
@@ -87,33 +87,44 @@
 .attendance-detail__value {
   display: flex;
   align-items: center;
-  padding: 0 32px;
+  padding: 0 40px;
   color: #000;
   font-weight: 700;
 }
 
+.attendance-detail__date {
+  gap: 120px;
+}
+
 .attendance-detail__time-pair {
-  gap: 32px;
+  gap: 40px;
 }
 
 .attendance-detail__separator {
   color: #000;
 }
 
+.attendance-detail__text-time {
+  min-width: 120px;
+}
+
 .attendance-detail__input {
   width: 120px;
   padding: 8px 12px;
-  border: 1px solid #737373;
+  border: 1px solid #d9d9d9;
   border-radius: 4px;
+  background: #fff;
   font-weight: 700;
 }
 
 .attendance-detail__textarea {
   width: 100%;
+  max-width: 360px;
   min-height: 72px;
   padding: 12px;
-  border: 1px solid #737373;
+  border: 1px solid #d9d9d9;
   border-radius: 4px;
+  background: #fff;
   font-weight: 700;
   resize: vertical;
 }
@@ -121,21 +132,23 @@
 .attendance-detail__actions {
   display: flex;
   justify-content: flex-end;
-  gap: 16px;
   margin-top: 32px;
 }
 
-.attendance-detail__back-link,
 .attendance-detail__submit-button {
-  display: inline-block;
+  min-width: 120px;
   padding: 10px 24px;
+  border: none;
   border-radius: 5px;
   background: #000;
   color: #fff;
+  font-size: 18px;
   font-weight: 700;
-  text-decoration: none;
 }
 
-.attendance-detail__submit-button {
-  border: none;
+.attendance-detail__pending-message {
+  margin: 24px 0 0;
+  color: #ff5555;
+  font-weight: 700;
+  text-align: right;
 }
