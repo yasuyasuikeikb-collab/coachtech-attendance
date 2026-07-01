@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\CorrectionRequestController;
 use Illuminate\Support\Facades\Route;
@@ -7,6 +8,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return redirect('/login');
 });
+
+Route::get('/admin/login', [AdminController::class, 'showLoginForm']);
+Route::post('/admin/login', [AdminController::class, 'login']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'stamp']);
