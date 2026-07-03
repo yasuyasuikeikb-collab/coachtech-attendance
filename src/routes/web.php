@@ -28,4 +28,6 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('attendanceRecord');
 
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
+
+    Route::get('/admin/attendance/list', [AdminController::class, 'attendanceList']);
 });
