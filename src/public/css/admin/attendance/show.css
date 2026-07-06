@@ -1,0 +1,138 @@
+.admin-attendance-detail {
+  display: flex;
+  justify-content: center;
+}
+
+.admin-attendance-detail__inner {
+  width: 100%;
+  max-width: 900px;
+}
+
+.admin-attendance-detail__title {
+  margin: 0 0 48px;
+  padding-left: 16px;
+  border-left: 8px solid #000;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.admin-attendance-detail__message {
+  margin: 0 0 24px;
+  padding: 16px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.admin-attendance-detail__message--success {
+  background: #e6ffed;
+  color: #0f7b2f;
+}
+
+.admin-attendance-detail__errors {
+  margin-bottom: 24px;
+  padding: 16px;
+  border: 1px solid #d93025;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.admin-attendance-detail__error {
+  margin: 0;
+  color: #d93025;
+  font-weight: 700;
+}
+
+.admin-attendance-detail__error+.admin-attendance-detail__error {
+  margin-top: 8px;
+}
+
+.admin-attendance-detail__form {
+  margin: 0;
+}
+
+.admin-attendance-detail__card {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.admin-attendance-detail__row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 72px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.admin-attendance-detail__row:last-child {
+  border-bottom: none;
+}
+
+.admin-attendance-detail__row--textarea {
+  min-height: 120px;
+}
+
+.admin-attendance-detail__label {
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  color: #737373;
+  font-weight: 700;
+}
+
+.admin-attendance-detail__value {
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  color: #000;
+  font-weight: 700;
+}
+
+.admin-attendance-detail__date {
+  gap: 120px;
+}
+
+.admin-attendance-detail__time-pair {
+  gap: 40px;
+}
+
+.admin-attendance-detail__separator {
+  color: #000;
+}
+
+.admin-attendance-detail__input {
+  width: 120px;
+  padding: 8px 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+  font-weight: 700;
+}
+
+.admin-attendance-detail__textarea {
+  width: 100%;
+  max-width: 360px;
+  min-height: 72px;
+  padding: 12px;
+  border: 1px solid #d9d9d9;
+  border-radius: 4px;
+  background: #fff;
+  font-weight: 700;
+  resize: vertical;
+}
+
+.admin-attendance-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.admin-attendance-detail__submit-button {
+  min-width: 120px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 5px;
+  background: #000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}

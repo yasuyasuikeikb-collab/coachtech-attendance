@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\Admin\LoginRequest;
+use App\Http\Requests\Admin\UpdateAttendanceRequest;
 use App\Models\AttendanceRecord;
 use App\Services\Attendance\AttendanceTimeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class AdminController extends Controller
@@ -77,10 +79,68 @@ class AdminController extends Controller
         ]);
     }
 
+    public function attendanceDetail(
+        Request $request,
+        AttendanceRecord $attendanceRecord
+    ): View {
+        $this->authorizeAdmin($request);
+
+        $attendanceRecord->load([
+            'user',
+            'breaks' => function ($query): void {
+                $query->orderBy('break_in');
+            },
+        ]);
+
+        return view('admin.attendance.show', [
+            'attendanceRecord' => $attendanceRecord,
+        ]);
+    }
+
+    public function updateAttendance(
+        UpdateAttendanceRequest $request,
+        AttendanceRecord $attendanceRecord
+    ): RedirectResponse {
+        $this->authorizeAdmin($request);
+
+        DB::transaction(function () use ($request, $attendanceRecord): void {
+            $attendanceRecord->update([
+                'clock_in' => $this->formatTime($request->input('requested_clock_in')),
+                'clock_out' => $this->formatTime($request->input('requested_clock_out')),
+                'comment' => $request->input('requested_comment'),
+            ]);
+
+            $attendanceRecord->breaks()->delete();
+
+            foreach ($request->input('requested_breaks', []) as $requestedBreak) {
+                $breakIn = $requestedBreak['break_in'] ?? null;
+                $breakOut = $requestedBreak['break_out'] ?? null;
+
+                if (!$breakIn && !$breakOut) {
+                    continue;
+                }
+
+                $attendanceRecord->breaks()->create([
+                    'break_in' => $this->formatTime($breakIn),
+                    'break_out' => $this->formatTime($breakOut),
+                ]);
+            }
+        });
+
+        return redirect()
+            ->back()
+            ->with('success', '勤怠情報を修正しました。');
+    }
+
     private function authorizeAdmin(Request $request): void
     {
         if (!$request->user() || !$request->user()->isAdmin()) {
             abort(403);
         }
+    }
+
+    private function formatTime(string $time): string
+    {
+        return $time . ':00';
     }
 }
