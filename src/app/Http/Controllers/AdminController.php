@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Admin\LoginRequest;
 use App\Http\Requests\Admin\UpdateAttendanceRequest;
 use App\Models\AttendanceRecord;
+use App\Models\User;
 use App\Services\Attendance\AttendanceTimeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -130,6 +131,27 @@ class AdminController extends Controller
         return redirect()
             ->back()
             ->with('success', '勤怠情報を修正しました。');
+    }
+
+    public function staffList(Request $request): View
+    {
+        $this->authorizeAdmin($request);
+
+        $staffUsers = User::where('admin_status', false)
+            ->orderBy('id')
+            ->get();
+
+        $staffRows = $staffUsers->map(function (User $staffUser): array {
+            return [
+                'id' => $staffUser->id,
+                'name' => $staffUser->name,
+                'email' => $staffUser->email,
+            ];
+        });
+
+        return view('admin.staff.index', [
+            'staffRows' => $staffRows,
+        ]);
     }
 
     private function authorizeAdmin(Request $request): void

@@ -36,4 +36,6 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/admin/attendance/{attendanceRecord}/update', [AdminController::class, 'updateAttendance'])
         ->whereNumber('attendanceRecord');
+
+    Route::get('/admin/staff/list', [AdminController::class, 'staffList']);
 });
