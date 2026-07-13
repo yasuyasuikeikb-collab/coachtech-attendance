@@ -154,6 +154,51 @@ class AdminController extends Controller
         ]);
     }
 
+    public function staffAttendanceList(
+        Request $request,
+        User $staffUser,
+        AttendanceTimeService $attendanceTimeService
+    ): View {
+        $this->authorizeAdmin($request);
+
+        if ($staffUser->isAdmin()) {
+            abort(404);
+        }
+
+        $currentMonth = Carbon::parse(
+            $request->query('month', today()->format('Y-m'))
+        );
+
+        $attendanceRecords = AttendanceRecord::where('user_id', $staffUser->id)
+            ->whereYear('date', $currentMonth->year)
+            ->whereMonth('date', $currentMonth->month)
+            ->with('breaks')
+            ->orderBy('date')
+            ->get();
+
+        $attendanceRows = $attendanceRecords->map(function (
+            AttendanceRecord $attendanceRecord
+        ) use ($attendanceTimeService): array {
+            $totalBreakMinutes = $attendanceTimeService->getTotalBreakMinutes($attendanceRecord);
+            $totalWorkMinutes = $attendanceTimeService->getTotalWorkMinutes($attendanceRecord);
+
+            return [
+                'id' => $attendanceRecord->id,
+                'date' => $attendanceRecord->date->format('m/d'),
+                'clockIn' => $attendanceRecord->clock_in ? substr($attendanceRecord->clock_in, 0, 5) : '',
+                'clockOut' => $attendanceRecord->clock_out ? substr($attendanceRecord->clock_out, 0, 5) : '',
+                'breakTime' => $attendanceTimeService->formatMinutes($totalBreakMinutes),
+                'totalTime' => $attendanceTimeService->formatMinutes($totalWorkMinutes),
+            ];
+        });
+
+        return view('admin.staff.attendance', [
+            'staffUser' => $staffUser,
+            'currentMonth' => $currentMonth,
+            'attendanceRows' => $attendanceRows,
+        ]);
+    }
+
     private function authorizeAdmin(Request $request): void
     {
         if (!$request->user() || !$request->user()->isAdmin()) {

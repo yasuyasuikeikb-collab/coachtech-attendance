@@ -31,6 +31,9 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/admin/attendance/list', [AdminController::class, 'attendanceList']);
 
+    Route::get('/admin/attendance/staff/{staffUser}', [AdminController::class, 'staffAttendanceList'])
+        ->whereNumber('staffUser');
+
     Route::get('/admin/attendance/{attendanceRecord}', [AdminController::class, 'attendanceDetail'])
         ->whereNumber('attendanceRecord');
 
