@@ -10,14 +10,16 @@ class CorrectionRequestController extends Controller
 {
     public function index(Request $request): View
     {
-        $selectedStatus = $request->query(
-            'status',
-            AttendanceCorrectionRequest::STATUS_PENDING
-        );
-
-        if (!in_array($selectedStatus, $this->availableStatuses(), true)) {
-            $selectedStatus = AttendanceCorrectionRequest::STATUS_PENDING;
+        if ($request->user()->isAdmin()) {
+            return $this->adminIndex($request);
         }
+
+        return $this->userIndex($request);
+    }
+
+    private function userIndex(Request $request): View
+    {
+        $selectedStatus = $this->getSelectedStatus($request);
 
         $correctionRequests = AttendanceCorrectionRequest::where(
             'applicant_user_id',
@@ -33,7 +35,7 @@ class CorrectionRequestController extends Controller
         ): array {
             return [
                 'status' => $this->formatStatus($correctionRequest->status),
-                'name' => $correctionRequest->applicant->name,
+                'name' => $correctionRequest->applicant?->name ?? '',
                 'targetDate' => $correctionRequest->attendanceRecord?->date?->format('Y/m/d') ?? '',
                 'reason' => $correctionRequest->requested_comment,
                 'requestedAt' => $correctionRequest->created_at?->format('Y/m/d') ?? '',
@@ -45,6 +47,48 @@ class CorrectionRequestController extends Controller
             'selectedStatus' => $selectedStatus,
             'correctionRequestRows' => $correctionRequestRows,
         ]);
+    }
+
+    private function adminIndex(Request $request): View
+    {
+        $selectedStatus = $this->getSelectedStatus($request);
+
+        $correctionRequests = AttendanceCorrectionRequest::where('status', $selectedStatus)
+            ->with(['attendanceRecord', 'applicant'])
+            ->latest()
+            ->get();
+
+        $correctionRequestRows = $correctionRequests->map(function (
+            AttendanceCorrectionRequest $correctionRequest
+        ): array {
+            return [
+                'id' => $correctionRequest->id,
+                'status' => $this->formatStatus($correctionRequest->status),
+                'name' => $correctionRequest->applicant?->name ?? '',
+                'targetDate' => $correctionRequest->attendanceRecord?->date?->format('Y/m/d') ?? '',
+                'reason' => $correctionRequest->requested_comment,
+                'requestedAt' => $correctionRequest->created_at?->format('Y/m/d') ?? '',
+            ];
+        });
+
+        return view('admin.correction.index', [
+            'selectedStatus' => $selectedStatus,
+            'correctionRequestRows' => $correctionRequestRows,
+        ]);
+    }
+
+    private function getSelectedStatus(Request $request): string
+    {
+        $selectedStatus = $request->query(
+            'status',
+            AttendanceCorrectionRequest::STATUS_PENDING
+        );
+
+        if (!in_array($selectedStatus, $this->availableStatuses(), true)) {
+            return AttendanceCorrectionRequest::STATUS_PENDING;
+        }
+
+        return $selectedStatus;
     }
 
     private function availableStatuses(): array
