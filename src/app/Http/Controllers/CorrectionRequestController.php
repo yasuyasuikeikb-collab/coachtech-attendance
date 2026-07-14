@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\AttendanceCorrectionRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 
 class CorrectionRequestController extends Controller
@@ -15,6 +17,74 @@ class CorrectionRequestController extends Controller
         }
 
         return $this->userIndex($request);
+    }
+
+    public function showApproval(
+        Request $request,
+        AttendanceCorrectionRequest $correctionRequest
+    ): View {
+        $this->authorizeAdmin($request);
+
+        $correctionRequest->load([
+            'attendanceRecord',
+            'attendanceRecord.user',
+            'correctionBreaks' => function ($query): void {
+                $query->orderBy('break_order');
+            },
+            'applicant',
+        ]);
+
+        return view('admin.correction.show', [
+            'correctionRequest' => $correctionRequest,
+        ]);
+    }
+
+    public function approve(
+        Request $request,
+        AttendanceCorrectionRequest $correctionRequest
+    ): RedirectResponse {
+        $this->authorizeAdmin($request);
+
+        if ($correctionRequest->status === AttendanceCorrectionRequest::STATUS_APPROVED) {
+            return redirect()
+                ->back()
+                ->with('success', 'この申請は既に承認済みです。');
+        }
+
+        $correctionRequest->load(['attendanceRecord', 'correctionBreaks']);
+
+        DB::transaction(function () use ($request, $correctionRequest): void {
+            $attendanceRecord = $correctionRequest->attendanceRecord;
+
+            $attendanceRecord->update([
+                'clock_in' => $correctionRequest->requested_clock_in,
+                'clock_out' => $correctionRequest->requested_clock_out,
+                'comment' => $correctionRequest->requested_comment,
+            ]);
+
+            $attendanceRecord->breaks()->delete();
+
+            foreach ($correctionRequest->correctionBreaks as $correctionBreak) {
+                if (!$correctionBreak->requested_break_in && !$correctionBreak->requested_break_out) {
+                    continue;
+                }
+
+                $attendanceRecord->breaks()->create([
+                    'break_in' => $correctionBreak->requested_break_in,
+                    'break_out' => $correctionBreak->requested_break_out,
+                ]);
+            }
+
+            $correctionRequest->update([
+                'status' => AttendanceCorrectionRequest::STATUS_APPROVED,
+                'approved_by' => $request->user()->id,
+                'approved_at' => now(),
+            ]);
+        });
+
+        return redirect()
+            ->back()
+            ->with('success', '修正申請を承認しました。');
     }
 
     private function userIndex(Request $request): View
@@ -106,5 +176,12 @@ class CorrectionRequestController extends Controller
         }
 
         return '承認待ち';
+    }
+
+    private function authorizeAdmin(Request $request): void
+    {
+        if (!$request->user() || !$request->user()->isAdmin()) {
+            abort(403);
+        }
     }
 }

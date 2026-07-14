@@ -16,7 +16,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'stamp']);
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn']);
     Route::post('/attendance/break-start', [AttendanceController::class, 'startBreak']);
-    Route::post('/attendance/break-end', [AttendanceController::class, 'endBreak']);
+    Route::post('/attendance/break-end', [AttendanceController::class, 'breakEnd']);
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut']);
 
     Route::get('/attendance/list', [AttendanceController::class, 'index']);
@@ -28,6 +28,12 @@ Route::middleware('auth')->group(function () {
         ->whereNumber('attendanceRecord');
 
     Route::get('/stamp_correction_request/list', [CorrectionRequestController::class, 'index']);
+
+    Route::get('/stamp_correction_request/approve/{correctionRequest}', [CorrectionRequestController::class, 'showApproval'])
+        ->whereNumber('correctionRequest');
+
+    Route::post('/stamp_correction_request/approve/{correctionRequest}', [CorrectionRequestController::class, 'approve'])
+        ->whereNumber('correctionRequest');
 
     Route::get('/admin/attendance/list', [AdminController::class, 'attendanceList']);
 

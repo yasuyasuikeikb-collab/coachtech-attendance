@@ -1,0 +1,108 @@
+.admin-correction-detail {
+  display: flex;
+  justify-content: center;
+}
+
+.admin-correction-detail__inner {
+  width: 100%;
+  max-width: 900px;
+}
+
+.admin-correction-detail__title {
+  margin: 0 0 48px;
+  padding-left: 16px;
+  border-left: 8px solid #000;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.admin-correction-detail__message {
+  margin: 0 0 24px;
+  padding: 16px;
+  border-radius: 6px;
+  font-weight: 700;
+}
+
+.admin-correction-detail__message--success {
+  background: #e6ffed;
+  color: #0f7b2f;
+}
+
+.admin-correction-detail__card {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.admin-correction-detail__row {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 72px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.admin-correction-detail__row:last-child {
+  border-bottom: none;
+}
+
+.admin-correction-detail__row--textarea {
+  min-height: 120px;
+}
+
+.admin-correction-detail__label {
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  color: #737373;
+  font-weight: 700;
+}
+
+.admin-correction-detail__value {
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  color: #000;
+  font-weight: 700;
+}
+
+.admin-correction-detail__date {
+  gap: 120px;
+}
+
+.admin-correction-detail__time-pair {
+  gap: 40px;
+}
+
+.admin-correction-detail__separator {
+  color: #000;
+}
+
+.admin-correction-detail__time {
+  min-width: 120px;
+}
+
+.admin-correction-detail__actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 32px;
+}
+
+.admin-correction-detail__approve-form {
+  margin: 0;
+}
+
+.admin-correction-detail__approve-button,
+.admin-correction-detail__approved-button {
+  min-width: 120px;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 5px;
+  background: #000;
+  color: #fff;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.admin-correction-detail__approved-button {
+  background: #737373;
+}
