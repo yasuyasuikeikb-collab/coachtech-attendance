@@ -50,8 +50,8 @@ class UpdateAttendanceRequest extends FormRequest
 
             if ($clockIn >= $clockOut) {
                 $validator->errors()->add(
-                    'requested_clock_out',
-                    '退勤時間は出勤時間より後にしてください'
+                    'requested_clock_in',
+                    '出勤時間もしくは退勤時間が不適切な値です'
                 );
 
                 return;
@@ -67,8 +67,8 @@ class UpdateAttendanceRequest extends FormRequest
 
                 if (!$breakIn || !$breakOut) {
                     $validator->errors()->add(
-                        "requested_breaks.$index",
-                        '休憩時間を入力してください'
+                        "requested_breaks.$index.break_in",
+                        '休憩時間が不適切な値です'
                     );
 
                     continue;
@@ -76,17 +76,24 @@ class UpdateAttendanceRequest extends FormRequest
 
                 if ($breakIn >= $breakOut) {
                     $validator->errors()->add(
-                        "requested_breaks.$index",
+                        "requested_breaks.$index.break_in",
                         '休憩時間が不適切な値です'
                     );
 
                     continue;
                 }
 
-                if ($breakIn < $clockIn || $breakOut > $clockOut) {
+                if ($breakIn < $clockIn || $breakIn > $clockOut) {
                     $validator->errors()->add(
-                        "requested_breaks.$index",
-                        '休憩時間が勤務時間外です'
+                        "requested_breaks.$index.break_in",
+                        '休憩時間が不適切な値です'
+                    );
+                }
+
+                if ($breakOut > $clockOut) {
+                    $validator->errors()->add(
+                        "requested_breaks.$index.break_out",
+                        '休憩時間もしくは退勤時間が不適切な値です'
                     );
                 }
             }
