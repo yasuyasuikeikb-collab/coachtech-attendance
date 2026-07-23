@@ -5,51 +5,63 @@
 @endsection
 
 @section('content')
-<section class="stamp">
-    <div class="stamp__inner">
-        <p class="stamp__status">{{ $attendanceStatus }}</p>
+<section class="attendance-stamp">
+    <div class="attendance-stamp__inner">
+        <p class="attendance-stamp__status">
+            {{ $attendanceStatus }}
+        </p>
 
-        <p class="stamp__date">
+        <p class="attendance-stamp__date">
             {{ now()->format('Y年m月d日') }}
         </p>
 
-        <p class="stamp__time">
+        <p class="attendance-stamp__time">
             {{ now()->format('H:i') }}
         </p>
 
-        <div class="stamp__actions">
+        @if ($attendanceStatus === '退勤済')
+            <p class="attendance-stamp__message">
+                お疲れ様でした。
+            </p>
+        @endif
+
+        <div class="attendance-stamp__buttons">
             @if ($canClockIn)
-                <form class="stamp__form" action="/attendance/clock-in" method="post">
+                <form class="attendance-stamp__form" action="/attendance/clock-in" method="post">
                     @csrf
-                    <button class="stamp__button" type="submit">出勤</button>
+                    <button class="attendance-stamp__button" type="submit">
+                        出勤
+                    </button>
                 </form>
             @endif
 
             @if ($canClockOut)
-                <form class="stamp__form" action="/attendance/clock-out" method="post">
+                <form class="attendance-stamp__form" action="/attendance/clock-out" method="post">
                     @csrf
-                    <button class="stamp__button" type="submit">退勤</button>
+                    <button class="attendance-stamp__button" type="submit">
+                        退勤
+                    </button>
                 </form>
             @endif
 
             @if ($canStartBreak)
-                <form class="stamp__form" action="/attendance/break-start" method="post">
+                <form class="attendance-stamp__form" action="/attendance/break-start" method="post">
                     @csrf
-                    <button class="stamp__button stamp__button--secondary" type="submit">休憩入</button>
+                    <button class="attendance-stamp__button attendance-stamp__button--white" type="submit">
+                        休憩入
+                    </button>
                 </form>
             @endif
 
             @if ($canEndBreak)
-                <form class="stamp__form" action="/attendance/break-end" method="post">
+                <form class="attendance-stamp__form" action="/attendance/break-end" method="post">
                     @csrf
-                    <button class="stamp__button stamp__button--secondary" type="submit">休憩戻</button>
+                    <button class="attendance-stamp__button attendance-stamp__button--white" type="submit">
+                        休憩戻
+                    </button>
                 </form>
             @endif
         </div>
-
-        @if ($attendanceStatus === '退勤済')
-            <p class="stamp__message">お疲れ様でした。</p>
-        @endif
     </div>
 </section>
 @endsection
