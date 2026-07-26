@@ -1,18 +1,20 @@
-.stamp {
+.attendance-stamp {
   display: flex;
+  align-items: center;
   justify-content: center;
+  min-height: calc(100vh - 72px);
 }
 
-.stamp__inner {
+.attendance-stamp__inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   width: 100%;
-  max-width: 680px;
-  text-align: center;
 }
 
-.stamp__status {
-  display: inline-block;
+.attendance-stamp__status {
   margin: 0 0 32px;
-  padding: 8px 20px;
+  padding: 8px 24px;
   border-radius: 50px;
   background: #c8c8c8;
   color: #696969;
@@ -20,46 +22,51 @@
   font-weight: 700;
 }
 
-.stamp__date {
-  margin: 0 0 24px;
-  font-size: 32px;
+.attendance-stamp__date {
+  margin: 0 0 32px;
+  color: #000;
+  font-size: 40px;
+  font-weight: 400;
 }
 
-.stamp__time {
-  margin: 0 0 64px;
+.attendance-stamp__time {
+  margin: 0 0 80px;
+  color: #000;
   font-size: 80px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.attendance-stamp__message {
+  margin: -40px 0 80px;
+  color: #000;
+  font-size: 24px;
   font-weight: 700;
 }
 
-.stamp__actions {
+.attendance-stamp__buttons {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 80px;
 }
 
-
-.stamp__form {
+.attendance-stamp__form {
   margin: 0;
 }
 
-.stamp__button {
+.attendance-stamp__button {
   min-width: 220px;
-  padding: 16px 32px;
+  padding: 16px 40px;
   border: none;
   border-radius: 20px;
   background: #000;
   color: #fff;
   font-size: 32px;
   font-weight: 700;
+  cursor: pointer;
 }
 
-.stamp__button--secondary {
+.attendance-stamp__button--white {
   background: #fff;
   color: #000;
-}
-
-.stamp__message {
-  margin: 64px 0 0;
-  font-size: 26px;
-  font-weight: 700;
 }
