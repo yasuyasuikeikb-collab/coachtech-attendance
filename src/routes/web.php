@@ -12,7 +12,7 @@ Route::get('/', function () {
 Route::get('/admin/login', [AdminController::class, 'showLoginForm']);
 Route::post('/admin/login', [AdminController::class, 'login']);
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance', [AttendanceController::class, 'stamp']);
     Route::post('/attendance/clock-in', [AttendanceController::class, 'clockIn']);
     Route::post('/attendance/break-start', [AttendanceController::class, 'startBreak']);
