@@ -83,6 +83,13 @@
             <a class="admin-staff-attendance__back-link" href="/admin/staff/list">
                 スタッフ一覧に戻る
             </a>
+
+            <a
+                class="admin-staff-attendance__csv-link"
+                href="/admin/attendance/staff/{{ $staffUser->id }}/csv?month={{ $currentMonth->format('Y-m') }}"
+            >
+                CSV出力
+            </a>
         </div>
     </div>
 </section>

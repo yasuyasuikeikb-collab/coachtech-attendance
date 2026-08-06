@@ -78,12 +78,23 @@
 
 .admin-staff-attendance__actions {
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: space-between;
   margin-top: 32px;
 }
 
 .admin-staff-attendance__back-link {
   padding: 10px 24px;
+  border: 1px solid #000;
+  border-radius: 5px;
+  background: #fff;
+  color: #000;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-staff-attendance__csv-link {
+  padding: 10px 32px;
   border-radius: 5px;
   background: #000;
   color: #fff;

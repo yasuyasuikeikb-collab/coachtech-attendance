@@ -13,6 +13,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
 {
@@ -199,6 +200,71 @@ class AdminController extends Controller
         ]);
     }
 
+    public function downloadStaffAttendanceCsv(
+        Request $request,
+        User $staffUser,
+        AttendanceTimeService $attendanceTimeService
+    ): StreamedResponse {
+        $this->authorizeAdmin($request);
+
+        if ($staffUser->isAdmin()) {
+            abort(404);
+        }
+
+        $currentMonth = $this->getCsvTargetMonth($request);
+
+        $attendanceRecords = AttendanceRecord::where('user_id', $staffUser->id)
+            ->whereYear('date', $currentMonth->year)
+            ->whereMonth('date', $currentMonth->month)
+            ->with('breaks')
+            ->orderBy('date')
+            ->get();
+
+        $fileName = sprintf(
+            'attendance_%s_%s.csv',
+            $staffUser->id,
+            $currentMonth->format('Y-m')
+        );
+
+        return response()->streamDownload(function () use (
+            $attendanceRecords,
+            $staffUser,
+            $attendanceTimeService
+        ): void {
+            $handle = fopen('php://output', 'w');
+
+            fwrite($handle, "\xEF\xBB\xBF");
+
+            fputcsv($handle, [
+                '氏名',
+                '日付',
+                '出勤',
+                '退勤',
+                '休憩',
+                '合計',
+                '備考',
+            ]);
+
+            foreach ($attendanceRecords as $attendanceRecord) {
+                fputcsv($handle, [
+                    $staffUser->name,
+                    $this->formatCsvDate($attendanceRecord->date),
+                    $this->formatCsvTime($attendanceRecord->clock_in),
+                    $this->formatCsvTime($attendanceRecord->clock_out),
+                    $attendanceTimeService->formatMinutes(
+                        $attendanceTimeService->getTotalBreakMinutes($attendanceRecord)
+                    ),
+                    $this->formatCsvTotalTime($attendanceRecord, $attendanceTimeService),
+                    $attendanceRecord->comment ?? '',
+                ]);
+            }
+
+            fclose($handle);
+        }, $fileName, [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
     private function authorizeAdmin(Request $request): void
     {
         if (!$request->user() || !$request->user()->isAdmin()) {
@@ -209,5 +275,47 @@ class AdminController extends Controller
     private function formatTime(string $time): string
     {
         return $time . ':00';
+    }
+
+    private function getCsvTargetMonth(Request $request): Carbon
+    {
+        $month = $request->query('month', today()->format('Y-m'));
+
+        try {
+            return Carbon::createFromFormat('Y-m-d', $month . '-01')->startOfMonth();
+        } catch (\Throwable $exception) {
+            abort(422, '年月はYYYY-MM形式で指定してください。');
+        }
+    }
+
+    private function formatCsvDate($date): string
+    {
+        if (!$date) {
+            return '';
+        }
+
+        return Carbon::parse($date)->format('Y/m/d');
+    }
+
+    private function formatCsvTime($time): string
+    {
+        if (!$time) {
+            return '';
+        }
+
+        return Carbon::parse($time)->format('H:i');
+    }
+
+    private function formatCsvTotalTime(
+        AttendanceRecord $attendanceRecord,
+        AttendanceTimeService $attendanceTimeService
+    ): string {
+        if (!$attendanceRecord->clock_out) {
+            return '';
+        }
+
+        return $attendanceTimeService->formatMinutes(
+            $attendanceTimeService->getTotalWorkMinutes($attendanceRecord)
+        );
     }
 }

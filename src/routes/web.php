@@ -40,6 +40,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/admin/attendance/staff/{staffUser}', [AdminController::class, 'staffAttendanceList'])
         ->whereNumber('staffUser');
 
+    Route::get('/admin/attendance/staff/{staffUser}/csv', [AdminController::class, 'downloadStaffAttendanceCsv'])
+        ->whereNumber('staffUser');
+
     Route::get('/admin/attendance/{attendanceRecord}', [AdminController::class, 'attendanceDetail'])
         ->whereNumber('attendanceRecord');
 
