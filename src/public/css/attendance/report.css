@@ -1,0 +1,100 @@
+.report {
+  background: #ffffff;
+  min-height: calc(100vh - 80px);
+  padding: 30px 20px 60px;
+}
+
+.report__inner {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.report__title {
+  color: #000;
+  font-size: 15px;
+  font-weight: 700;
+  margin: 0 0 20px;
+}
+
+.report__lead {
+  color: #000;
+  font-size: 13px;
+  font-weight: 700;
+  margin: 0 0 24px;
+}
+
+.report__section {
+  margin-bottom: 34px;
+}
+
+.report__section-title {
+  color: #000;
+  font-size: 14px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.report__summary {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.report__card {
+  background: #fafafa;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  min-height: 74px;
+  padding: 14px 16px;
+}
+
+.report__card-label {
+  color: #333333;
+  font-size: 10px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.report__card-value {
+  color: #000;
+  font-size: 17px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.report__table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.report__table th,
+.report__table td {
+  border-bottom: 1px solid #eeeeee;
+  color: #000;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 10px 8px;
+  text-align: left;
+}
+
+.report__table th {
+  font-size: 11px;
+}
+
+.report__note {
+  color: #000;
+  font-size: 10px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+@media screen and (max-width: 768px) {
+  .report__inner {
+    max-width: 100%;
+  }
+
+  .report__summary {
+    grid-template-columns: 1fr;
+  }
+}

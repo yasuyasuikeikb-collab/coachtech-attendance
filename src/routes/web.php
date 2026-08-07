@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AttendanceController;
+use App\Http\Controllers\AttendanceReportController;
 use App\Http\Controllers\CorrectionRequestController;
 use Illuminate\Support\Facades\Route;
 
@@ -20,6 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/clock-out', [AttendanceController::class, 'clockOut']);
 
     Route::get('/attendance/list', [AttendanceController::class, 'index']);
+    Route::get('/attendance/report', [AttendanceReportController::class, 'index']);
 
     Route::get('/attendance/{attendanceRecord}', [AttendanceController::class, 'show'])
         ->whereNumber('attendanceRecord');
