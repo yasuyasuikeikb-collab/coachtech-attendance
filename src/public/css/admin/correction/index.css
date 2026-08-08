@@ -71,3 +71,55 @@
   font-weight: 700;
   text-decoration: none;
 }
+/* ===== UI微修正: 管理者申請一覧をデザイン見本に寄せる ===== */
+.admin-correction-list {
+    background: #f4f4f4;
+    padding-top: 42px;
+}
+
+.admin-correction-list__inner {
+    max-width: 900px;
+}
+
+.admin-correction-list__title {
+    border-left: 8px solid #000;
+    font-size: 28px;
+    line-height: 1.2;
+    margin-bottom: 54px;
+    padding-left: 18px;
+}
+
+.admin-correction-list__tabs {
+    border-bottom: 1px solid #000;
+    gap: 70px;
+    margin-bottom: 36px;
+    padding-bottom: 18px;
+}
+
+.admin-correction-list__tab {
+    color: #737373;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.admin-correction-list__tab--active {
+    color: #000;
+}
+
+.admin-correction-list__table {
+    border-radius: 6px;
+}
+
+.admin-correction-list__table th,
+.admin-correction-list__table td {
+    color: #737373;
+    font-size: 15px;
+    font-weight: 700;
+    padding: 18px 10px;
+}
+
+.admin-correction-list__detail-link,
+.admin-correction-list td a {
+    color: #000;
+    font-weight: 700;
+}

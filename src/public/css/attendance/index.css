@@ -1,40 +1,47 @@
 .attendance-list {
   display: flex;
   justify-content: center;
+  background: #f4f4f4;
+  min-height: calc(100vh - 80px);
+  padding: 40px 20px 60px;
 }
 
 .attendance-list__inner {
   width: 100%;
   max-width: 900px;
+  margin: 0 auto;
 }
 
 .attendance-list__title {
-  margin: 0 0 32px;
-  padding-left: 16px;
+  margin: 0 0 44px;
+  padding-left: 18px;
   border-left: 8px solid #000;
-  font-size: 30px;
+  color: #000;
+  font-size: 28px;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 .attendance-list__month-nav {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 32px;
-  padding: 16px 24px;
-  border-radius: 10px;
+  margin-bottom: 36px;
+  padding: 18px 28px;
+  border-radius: 6px;
   background: #fff;
 }
 
 .attendance-list__month-link {
   color: #737373;
-  font-size: 16px;
+  font-size: 15px;
   font-weight: 700;
   text-decoration: none;
 }
 
 .attendance-list__month {
   margin: 0;
+  color: #000;
   font-size: 20px;
   font-weight: 700;
 }
@@ -42,23 +49,26 @@
 .attendance-table {
   width: 100%;
   border-collapse: collapse;
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
+  table-layout: fixed;
   background: #fff;
 }
 
 .attendance-table__header {
-  padding: 16px;
-  border-bottom: 3px solid #f5f5f5;
+  padding: 18px 10px;
+  border-bottom: 2px solid #f0f0f0;
   color: #737373;
+  font-size: 15px;
   font-weight: 700;
   text-align: center;
 }
 
 .attendance-table__data {
-  padding: 16px;
+  padding: 18px 10px;
   border-bottom: 2px solid #f5f5f5;
   color: #737373;
+  font-size: 15px;
   font-weight: 700;
   text-align: center;
 }
@@ -66,12 +76,43 @@
 .attendance-table__empty {
   padding: 32px;
   color: #737373;
+  font-size: 15px;
   font-weight: 700;
   text-align: center;
 }
 
 .attendance-table__detail-link {
   color: #000;
+  font-size: 15px;
   font-weight: 700;
   text-decoration: none;
+}
+
+@media screen and (max-width: 768px) {
+  .attendance-list {
+    padding: 32px 16px 50px;
+  }
+
+  .attendance-list__title {
+    margin-bottom: 36px;
+    font-size: 24px;
+  }
+
+  .attendance-list__month-nav {
+    padding: 16px 18px;
+  }
+
+  .attendance-list__month-link {
+    font-size: 13px;
+  }
+
+  .attendance-list__month {
+    font-size: 17px;
+  }
+
+  .attendance-table__header,
+  .attendance-table__data {
+    padding: 14px 8px;
+    font-size: 13px;
+  }
 }
