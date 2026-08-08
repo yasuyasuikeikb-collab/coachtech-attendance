@@ -8,27 +8,41 @@
 
     <link rel="stylesheet" href="{{ asset('css/common/sanitize.css') }}">
     <link rel="stylesheet" href="{{ asset('css/common/base.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/common/header.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/common/admin-header.css') }}">
 
     @yield('css')
 </head>
 
-<body>
-    <header class="header">
-        <div class="header__inner">
-            <a class="header__logo-link" href="/attendance">
-                <img class="header__logo" src="{{ asset('images/coachtech.png') }}" alt="COACHTECH">
+<body class="admin-body">
+    <header class="admin-header">
+        <div class="admin-header__inner">
+            <a class="admin-header__logo-link" href="/attendance">
+                <img
+                    class="admin-header__logo"
+                    src="{{ asset('images/common/coachtech-logo.png') }}"
+                    alt="COACHTECH"
+                >
             </a>
 
-            <nav class="header__nav">
-                <a class="header__nav-link" href="/attendance">勤怠</a>
-                <a class="header__nav-link" href="/attendance/list">勤怠一覧</a>
-                <a class="header__nav-link" href="/stamp_correction_request/list">申請</a>
-                <a class="header__nav-link" href="/attendance/report">レポート</a>
+            <nav class="admin-header__nav">
+                <a class="admin-header__nav-link" href="/attendance">
+                    勤怠
+                </a>
+                <a class="admin-header__nav-link" href="/attendance/list">
+                    勤怠一覧
+                </a>
+                <a class="admin-header__nav-link" href="/stamp_correction_request/list">
+                    申請
+                </a>
+                <a class="admin-header__nav-link" href="/attendance/report">
+                    レポート
+                </a>
 
-                <form class="header__logout-form" action="/logout" method="post">
+                <form class="admin-header__logout-form" action="/logout" method="post">
                     @csrf
-                    <button class="header__logout-button" type="submit">ログアウト</button>
+                    <button class="admin-header__logout-button" type="submit">
+                        ログアウト
+                    </button>
                 </form>
             </nav>
         </div>
