@@ -4,15 +4,43 @@
 
 COACHTECH 勤怠管理アプリ
 
+## 前提環境
+
+このアプリを動かすには、以下が必要です。
+
+- Git
+- Docker
+- Docker Compose
+
+GitHubからSSHでcloneする場合は、事前にGitHubのSSHキー設定が必要です。
+
 ## 環境構築
 
 ### Dockerビルド
+
+SSHでcloneする場合
 
 ```
 git clone git@github.com:yasuyasuikeikb-collab/coachtech-attendance.git
 cd coachtech-attendance
 docker compose up -d --build
 ```
+
+HTTPSでcloneする場合
+
+```
+git clone https://github.com/yasuyasuikeikb-collab/coachtech-attendance.git
+cd coachtech-attendance
+docker compose up -d --build
+```
+
+コンテナが正常に起動しているか確認します。
+
+```
+docker compose ps
+```
+
+`nginx`、`php`、`mysql`、`phpmyadmin`、`mailhog` が起動していればOKです。
 
 ### Laravel環境構築
 
@@ -52,6 +80,16 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
 
+上記のDB設定は、`docker-compose.yml` のMySQL設定と一致している必要があります。
+
+確認する項目は以下です。
+
+```
+DB_DATABASE=laravel_db
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+```
+
 メール認証確認用にMailHogを使用するため、以下のメール設定を確認してください。
 
 ```
@@ -76,6 +114,16 @@ php artisan migrate:fresh --seed
 ```
 php artisan optimize:clear
 ```
+
+### 動作確認
+
+ブラウザで以下にアクセスしてください。
+
+```
+http://localhost
+```
+
+ログイン画面が表示されれば、環境構築は完了です。
 
 ## 使用技術（実行環境）
 
@@ -193,6 +241,9 @@ docker compose exec mysql mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS
 ```
 docker compose exec mysql mysql -u root -proot -e "GRANT ALL PRIVILEGES ON laravel_test.* TO 'laravel_user'@'%'; FLUSH PRIVILEGES;"
 ```
+
+上記コマンドの `-proot` は、MySQLのrootパスワードが `root` の場合の指定です。  
+`docker-compose.yml` の `MYSQL_ROOT_PASSWORD` が異なる場合は、その値に合わせて変更してください。
 
 PHPコンテナに入ります。
 
