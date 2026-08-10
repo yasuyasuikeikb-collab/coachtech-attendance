@@ -1,53 +1,49 @@
-# coachtech 勤怠管理アプリ
+# coachtech-attendance
 
 ## アプリケーション名
 
-coachtech 勤怠管理アプリ
-
-## 概要
-
-一般ユーザーが出勤、休憩、退勤を打刻し、自分の勤怠一覧や勤怠詳細を確認できるアプリケーションです。
-
-管理者ユーザーは全ユーザーの勤怠確認、勤怠修正、スタッフ別勤怠確認、修正申請の承認を行えます。
+COACHTECH 勤怠管理アプリ
 
 ## 環境構築
 
-### 1. リポジトリをクローン
+### Dockerビルド
 
-```bash
+```
 git clone git@github.com:yasuyasuikeikb-collab/coachtech-attendance.git
 cd coachtech-attendance
+docker compose up -d --build
 ```
 
-### 2. Docker Compose用の環境変数を作成
+### Laravel環境構築
 
-```bash
+PHPコンテナに入ります。
+
+```
+docker compose exec php bash
+cd /var/www
+```
+
+Composerパッケージをインストールします。
+
+```
+composer install
+```
+
+`.env` ファイルを作成します。
+
+```
 cp .env.example .env
 ```
 
-必要に応じて、現在のユーザーIDとグループIDを確認します。
+アプリケーションキーを作成します。
 
-```bash
-id -u
-id -g
+```
+php artisan key:generate
 ```
 
-`.env` の値を自分の環境に合わせます。
+`.env` ファイルを作成後、以下のDB接続設定を確認してください。
 
-```env
-UID=1000
-GID=1000
 ```
-
-### 3. Laravel用の環境変数を作成
-
-```bash
-cp src/.env.example src/.env
-```
-
-`src/.env` のDB設定は以下の通りです。
-
-```env
 DB_CONNECTION=mysql
 DB_HOST=mysql
 DB_PORT=3306
@@ -56,82 +52,229 @@ DB_USERNAME=laravel_user
 DB_PASSWORD=laravel_pass
 ```
 
-### 4. Dockerコンテナを起動
+メール認証確認用にMailHogを使用するため、以下のメール設定を確認してください。
 
-```bash
-docker compose up -d --build
+```
+MAIL_MAILER=smtp
+MAIL_HOST=mailhog
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS=noreply@example.com
+MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-### 5. PHPコンテナに入る
+マイグレーションとシーディングを実行します。
 
-```bash
-docker compose exec php bash
 ```
-
-### 6. Composerパッケージをインストール
-
-```bash
-composer install
-```
-
-### 7. アプリケーションキーを作成
-
-```bash
-php artisan key:generate
-```
-
-### 8. マイグレーションとシーディングを実行
-
-```bash
 php artisan migrate:fresh --seed
 ```
 
-## 使用技術
+キャッシュをクリアします。
 
-- PHP 8.1
-- Laravel
-- MySQL 8.0.26
-- Nginx 1.21.1
+```
+php artisan optimize:clear
+```
+
+## 使用技術（実行環境）
+
+- PHP 8.x
+- Laravel 8.x
+- MySQL 8.x
+- nginx
 - Docker / Docker Compose
-- phpMyAdmin
-
-## URL
-
-| 画面 | URL |
-| --- | --- |
-| アプリ | http://localhost |
-| phpMyAdmin | http://localhost:8080 |
-| 一般ログイン | http://localhost/login |
-| 管理者ログイン | http://localhost/admin/login |
-| 勤怠登録 | http://localhost/attendance |
-
-## ログイン情報
-
-Seeder作成後に、以下のユーザーでログインできるようにします。
-
-| 種別 | メールアドレス | パスワード |
-| --- | --- | --- |
-| 一般ユーザー1 | user1@example.com | password |
-| 一般ユーザー2 | user2@example.com | password |
-| 管理者ユーザー | user3@example.com | password |
+- MailHog
+- Laravel Fortify
+- Laravel Sanctum
 
 ## ER図
 
-後で追加します。
+![ER図](./docs/images/attendance_management_er_diagram.png)
 
-## テーブル設計
+## URL
 
-後で追加します。
+- 開発環境：[http://localhost](http://localhost)
+- phpMyAdmin：[http://localhost:8080](http://localhost:8080)
+- MailHog：[http://localhost:8025](http://localhost:8025)
 
-## テスト実行
+## ログイン情報
 
-```bash
-docker compose exec php php artisan test
+### 一般ユーザー
+
+```
+メールアドレス：user1@example.com
+パスワード：password
 ```
 
-## 注意事項
+```
+メールアドレス：user2@example.com
+パスワード：password
+```
 
-- `.env` と `src/.env` はGit管理しません。
-- `src/vendor` と `src/node_modules` はGit管理しません。
-- `docker/mysql/data` はGit管理しません。
-- 管理者ユーザーは `users.admin_status` が `true` のユーザーとして管理します。
+### 管理者ユーザー
+
+```
+メールアドレス：user3@example.com
+パスワード：password
+```
+
+## 主なページ
+
+### 一般ユーザー
+
+- 会員登録画面：[http://localhost/register](http://localhost/register)
+- ログイン画面：[http://localhost/login](http://localhost/login)
+- 出勤登録画面：[http://localhost/attendance](http://localhost/attendance)
+- 勤怠一覧画面：[http://localhost/attendance/list](http://localhost/attendance/list)
+- 勤怠詳細画面：`/attendance/{attendanceRecord}`
+- 申請一覧画面：[http://localhost/stamp_correction_request/list](http://localhost/stamp_correction_request/list)
+- マイ勤怠レポート画面：[http://localhost/attendance/report](http://localhost/attendance/report)
+
+### 管理者
+
+- 管理者ログイン画面：[http://localhost/admin/login](http://localhost/admin/login)
+- 勤怠一覧画面：[http://localhost/admin/attendance/list](http://localhost/admin/attendance/list)
+- 勤怠詳細画面：`/admin/attendance/{attendanceRecord}`
+- スタッフ一覧画面：[http://localhost/admin/staff/list](http://localhost/admin/staff/list)
+- スタッフ別勤怠一覧画面：`/admin/attendance/staff/{staffUser}`
+- スタッフ別勤怠CSV出力：`/admin/attendance/staff/{staffUser}/csv`
+- 申請一覧画面：[http://localhost/stamp_correction_request/list](http://localhost/stamp_correction_request/list)
+- 修正申請承認画面：`/stamp_correction_request/approve/{correctionRequest}`
+
+## 主な機能
+
+### 一般ユーザー機能
+
+- 会員登録
+- ログイン
+- メール認証
+- 出勤打刻
+- 休憩開始
+- 休憩終了
+- 退勤打刻
+- 勤怠一覧表示
+- 勤怠詳細表示
+- 勤怠修正申請
+- 修正申請一覧表示
+- マイ勤怠レポート表示
+
+### 管理者機能
+
+- 管理者ログイン
+- 日別勤怠一覧表示
+- 勤怠詳細確認
+- 勤怠情報修正
+- スタッフ一覧表示
+- スタッフ別勤怠一覧表示
+- スタッフ別勤怠CSV出力
+- 修正申請一覧表示
+- 修正申請承認
+
+### API機能
+
+- 勤怠一覧取得
+- 勤怠詳細取得
+- 勤怠登録
+- 勤怠更新
+- 勤怠削除
+- SanctumによるAPI認証
+
+## テスト環境構築
+
+テスト用データベースを作成します。
+
+```
+docker compose exec mysql mysql -u root -proot -e "CREATE DATABASE IF NOT EXISTS laravel_test CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+テスト用データベースに権限を付与します。
+
+```
+docker compose exec mysql mysql -u root -proot -e "GRANT ALL PRIVILEGES ON laravel_test.* TO 'laravel_user'@'%'; FLUSH PRIVILEGES;"
+```
+
+PHPコンテナに入ります。
+
+```
+docker compose exec php bash
+cd /var/www
+```
+
+`.env.testing` ファイルを作成します。
+
+```
+cp .env.example .env.testing
+```
+
+`.env.testing` ファイルのDB接続設定を以下のように変更してください。
+
+```
+APP_ENV=testing
+DB_CONNECTION=mysql
+DB_HOST=mysql
+DB_PORT=3306
+DB_DATABASE=laravel_test
+DB_USERNAME=laravel_user
+DB_PASSWORD=laravel_pass
+MAIL_MAILER=array
+```
+
+テスト環境用のアプリケーションキーを作成します。
+
+```
+php artisan key:generate --env=testing
+```
+
+テストを実行します。
+
+```
+php artisan test
+```
+
+## API
+
+### 勤怠一覧取得
+
+```
+GET /api/v1/attendance-records
+```
+
+### 勤怠詳細取得
+
+```
+GET /api/v1/attendance-records/{attendanceRecord}
+```
+
+### 勤怠登録
+
+```
+POST /api/v1/attendance-records
+```
+
+### 勤怠更新
+
+```
+PUT /api/v1/attendance-records/{attendanceRecord}
+```
+
+### 勤怠削除
+
+```
+DELETE /api/v1/attendance-records/{attendanceRecord}
+```
+
+APIの登録・更新・削除にはSanctumによる認証が必要です。
+
+## 補足
+
+管理者は `/admin/login` からログインできます。
+
+通常の `/login` から管理者アカウントでログインした場合も、管理者画面に遷移します。
+
+勤怠ステータスはDBに保存せず、勤怠情報から計算しています。
+
+- 当日の勤怠がない：勤務外
+- 出勤済みで退勤していない：出勤中
+- 休憩開始済みで休憩終了していない：休憩中
+- 退勤済み：退勤済
